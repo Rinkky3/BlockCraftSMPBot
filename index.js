@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 const bot = new Discord.Client();
 const fs = require('fs');
 const moment = require('moment') // the moment package. to make this work u need to run "npm install moment --save 
-const config = require("./config.json");
 const ms = require("ms") // npm install ms -s
 
 // json files
