@@ -37,12 +37,12 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
 // event listener: new guild members
 bot.on('guildMemberAdd', member => {
     // Send the message to a designated channel on a server:
-    const channel = member.guild.channels.find('name', 'general');
+    const channel = member.guild.channels.find('name', 'pending');
     const channelinfo = member.guild.channels.find('name', 'info');
     // Do nothing if the channel wasn't found on this server
     if (!channel) return;
     // Send the message, mentioning the member
-    channel.send(`Welcome ${member} to BlockCraft SMP's discord! Make sure to check out the ${channelinfo} channel! `);
+    channel.send(`welcome ${member}! You can apply to get white-listed, by clicking the link provided here: ${channelinfo}. The answer must be a paragraph long. Good luck! `);
     
   });
 
@@ -90,25 +90,13 @@ bot.on('message', async message => {
 
 
     //timed message
-    const generalchat = bot.channels.get("469490700845580298")
-    let timer = bot.setInterval(timedMessage, /*172800000*/10800000);
+    //const generalchat = bot.channels.get("469490700845580298")
+    //let timer = bot.setInterval(timedMessage, /*172800000*/10800000);
     //let timer2 = bot.setInterval(timedMessage2, 300000);
     
     //function timedMessage() {
       //generalchat.send(`Topic of the week: `)
       //.catch(console.error)};
-
-    /*activities = ["prefix ` | Investigating Mafia",
-                  "prefix ` | Searching For The coven",
-                  "prefix ` | Having A Meeting",
-                  "prefix ` | Talking With The Agency",
-                  "prefix ` | Building SkyBases",
-                  "prefix ` | ¯\_(ツ)_/¯"]
-    
-    function timedMessage2() {
-      var result = Math.floor((Math.random() * activities.length) + 0)
-      bot.user.setActivity((activities[result])).catch(console.error)
-    };*/
 
 
     //bot info command
