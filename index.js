@@ -65,7 +65,7 @@ bot.on('message', async message => {
     if (!userData[sender.id].SP) userData[sender.id].SP = 0;
     if (!userData[sender.id].username) userData[sender.id].username = sender.username;
 
-    fs.writeFile('Storage/userData.json', JSON.stringify(userData), (err) => {
+    fs.writeFile('./storage/userData.json', JSON.stringify(userData), (err) => {
         if (err) console.error(err)
     });
 
@@ -159,6 +159,28 @@ bot.on('message', async message => {
           .addField("Name", rMember)
           .addField("ID", rMember.id)
           .addField("Joined at", rMember.joinedAt)
+  
+          await message.channel.send(memberembed)
+
+    };
+
+    //role info
+    if (msg.split(" ")[0] === prefix + "roleinfo") {
+      //ex `roleinfo @owner
+      let args = msg.split(" ").slice(1)
+      let rRole = message.guild.member(message.mentions.roles.first() || message.guild.roles.get(args[0]))
+      let rmembers = message.guild.roles.get(role.id).members.map(m => m.user.tag);
+      
+
+        if(!rRole) 
+          return message.reply("Who dat role? I cant find it.")
+
+          let memberembed = new Discord.RichEmbed()
+          .setDescription("__**Role Information**__")
+          .setColor(0x15f153)
+          .addField("Name", rRole)
+          .addField("ID", rRole.id)
+          .addField(`Members assigned to this role: ${message.guild.members.filter(m =>!m.user.bot).filter(m => m.roles.get(role.id)).map(m => `\n[${m.user.username} : ${m.user.id}]`)}`)
   
           await message.channel.send(memberembed)
 
