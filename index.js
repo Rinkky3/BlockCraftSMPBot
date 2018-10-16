@@ -229,7 +229,7 @@ bot.on('message', async message => {
         let m = await message.channel.send({embed: {
             color: 0x05ff00,
             title: "Your ~~life~~ balance",
-            description: `${userData[sender.id].money} insert super secret emoji here \n ${userData[sender.id].SP} Event Points`,
+            description: `${userData[sender.id].money} insert super secret emoji here \n${userData[sender.id].SP} Event Points`,
             timestamp: new Date(),
             footer: {
               icon_url: sender.avatarURL
@@ -244,7 +244,7 @@ bot.on('message', async message => {
     const coin =  Math.floor((Math.random() * 2) + 1);
 
     if (msg === prefix + 'coinflip') {
-        let m = await message.channel.send("**Flips a coin:** \n Commands: __`guess D__ - __`guess N__**")
+        let m = await message.channel.send("**Flips a coin:** \n Commands: __`guess D__ - __`guess N__")
     };
 
           //Diamonds
@@ -253,9 +253,11 @@ bot.on('message', async message => {
           if (coin <= 1) {
             let m = await message.reply('The coin landed on Diamonds, You won!',// {files: ["Storage/images/diamond.png"]}) //128x128 images are ideal
             userData[sender.id].money = (userData[sender.id].money+300))
+            let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
           } else if (coin >= 2) {
             let m = await message.reply("The coin landed on Nuggets, you lost.",// { files: ["Storage/images/nugget.png"]})
             userData[sender.id].money = (userData[sender.id].money-150))
+            let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
           }
         };
         
@@ -265,9 +267,11 @@ bot.on('message', async message => {
           if (coin <= 1) {
             let m = await message.reply('The coin landed on Nuggets, You won!',// {files: ["Storage/images/nugget.png"]})
             userData[sender.id].money = (userData[sender.id].money+300))
+            let m1 = await message.channel.send(` You now have: ${userData[sender.id].money} insert super secret emoji here`)
           } else if (coin >= 2) {
-            let m = await message.reply("The coin landed on Diamonds, you lost.",// {files: ["Storage/images/diamond.png"]})
+            let m = await message.reply("The coin landed on Diamonds, you lost. ",// {files: ["Storage/images/diamond.png"]})
             userData[sender.id].money = (userData[sender.id].money-150))
+            let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
           }
         };
 
