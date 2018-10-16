@@ -6,6 +6,7 @@ const moment = require('moment') // the moment package. to make this work u need
 const ms = require("ms") // npm install ms -s
 
 // json files
+let userData = JSON.parse(fs.readFileSync("storage/userData.json", "utf8"))
 
 // Listener Event: Bot Launched
 bot.on('ready', () => {
@@ -13,7 +14,7 @@ bot.on('ready', () => {
 
     //const botchat = bot.channels.get("469992574791319552")
     //const generalchat = bot.channels.get("469490700845580298")
-    //generalchat.send(`Topic of the week: After the attack towards the coven from a demon, Steven demands all clans to be disbanded. The server has to choose: does he want the end of all clans? ***React to the announcement on #announcements reguarding the topic with a 👍 if you agree, or with a 👎 if you want clans to stay!***`)
+    //generalchat.send(`Topic of the week: `)
     
     
     bot.user.setActivity("prefix ` | Blocks Awakens")
@@ -57,6 +58,15 @@ bot.on('message', async message => {
     let nick = sender.username
     let Owner = message.guild.roles.find('name', "Owner")    
 
+    //json stuff
+    if (!userData[sender.id]) userData[sender.id] = {}
+    if (!userData[sender.id].money) userData[sender.id].money = 0;
+    if (!userData[sender.id].SP) userData[sender.id].SP = 0;
+    if (!userData[sender.id].username) userData[sender.id].username = sender.username;
+
+    fs.writeFile('Storage/userData.json', JSON.stringify(userData), (err) => {
+        if (err) console.error(err)
+    });
 
     // commands
 
@@ -69,7 +79,7 @@ bot.on('message', async message => {
     }
 
 
-    //Pollbot replacement
+    //Single Poll
     if (msg.startsWith("poll:")) {
       if(sender.id === "186487324517859328" || message.member.roles.has(Owner.id)) { 
             let m = await message.react("👍")
@@ -125,7 +135,7 @@ bot.on('message', async message => {
         .addField("Server Name", message.guild.name)
         .addField("Created On", message.guild.createdAt)
         .addField("Total Members", message.guild.memberCount)
-        .addField("Emoji", bot.emojis + "*work in progress hehexd*")
+        .addField("Emoji", guild.emojis + "*work in progress*")
 
         await message.channel.send(serverembed)
 
@@ -139,7 +149,7 @@ bot.on('message', async message => {
       let micon = rMember.displayAvatarURL
 
         if(!rMember) 
-          return message.reply("No user Specified")
+          return message.reply("Who dat user? I dunno him.")
 
           let memberembed = new Discord.RichEmbed()
           .setDescription("__**Member Information**__")
@@ -160,12 +170,12 @@ bot.on('message', async message => {
       let args = msg.split(" ").slice(1)
       let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
       let rreason = args.join(" ").slice(22)
-      let reportschannel = message.guild.channels.find(`name`, "logs")
+      let reportschannel = message.guild.channels.find(`name`, "staff")
 
         message.delete()
 
-        if(!rUser) return message.reply("There's no such user.")
-        if(!rreason) return message.reply("You can't report without a good reason.")
+        if(!rUser) return message.reply("Da user you searchin, is unavailable, please report later.")
+        if(!rreason) return message.reply("Where da reason? i dont see any.")
 
         let reportEmbed = new Discord.RichEmbed()
         .setDescription("Report-ing for duty!")
@@ -193,6 +203,93 @@ bot.on('message', async message => {
                 }})
               })
     };
+
+    //GAMBLING SHIT
+
+    // bal access
+    if (msg === prefix + 'bal') {
+        let m = await message.channel.send({embed: {
+            color: 0x05ff00,
+            title: "Your ~~life~~ balance",
+            description: `${userData[sender.id].money} insert super secret emoji here \n ${userData[sender.id].SP} Event Points`,
+            timestamp: new Date(),
+            footer: {
+              icon_url: sender.avatarURL
+            }
+          }
+        })
+    };
+
+
+    //coinguess game
+
+    const coin =  Math.floor((Math.random() * 2) + 1);
+
+    if (msg === prefix + 'coinflip') {
+        let m = await message.channel.send("**Flips a coin:** \n Commands: __`guess D__ - __`guess N__**")
+    };
+
+          //Diamonds
+
+        if (msg === prefix + 'guess d' || msg === prefix + 'g d'  ) {
+          if (coin <= 1) {
+            let m = await message.reply('The coin landed on Diamonds, You won!', {files: ["Storage/images/diamond.png"]}) //128x128 images are ideal
+            //userData[sender.id].money = (userData[sender.id].money+300)
+          } else if (coin >= 2) {
+            let m = await message.reply("The coin landed on Nuggets, you lost.", { files: ["Storage/images/nugget.png"]})
+            //userData[sender.id].money = (userData[sender.id].money-150)
+          }
+        };
+        
+          //Nuggets
+
+        if (msg === prefix + 'guess n' || msg === prefix + 'g n' ) {
+          if (coin <= 1) {
+            let m = await message.reply('The coin landed on Nuggets, You won!', {files: ["Storage/images/nugget.png"]})
+            //userData[sender.id].money = (userData[sender.id].money+300)
+          } else if (coin >= 2) {
+            let m = await message.reply("The coin landed on Diamonds, you lost.", {files: ["Storage/images/diamond.png"]})
+            //userData[sender.id].money = (userData[sender.id].money-150)
+          }
+        };
+
+    
+    //8ball
+
+    if (msg === prefix + "8ball") {
+        let m = await message.reply('give me a question >:(')
+    } else if (msg.startsWith(prefix + "8ball")) {
+        var sayings = ["Of course not.",
+                      "I believe it is true.",
+                      "Can you repeat the question? i wasnt listening",
+                      "Dont ask stupid things",
+                      "Out of all the things you could ask.."];
+
+        var results =  Math.floor((Math.random() * sayings.length) + 0)
+        let m = await message.reply(sayings[results]);
+    } else if (msg.startsWith(prefix + "8ball") && msg.includes("event"||"event planning"||"alien"||"ufo")) {
+        if (sender.id !== ["186487324517859328","376950284968001556","353782817777385472"]) {
+          message.send("No leaks for future events? Open your eyes, chinese man. Rinkky Teases thinks all day and night. He cant keep his mounth shut.")
+        }
+      };
+
+
+      //DM forwarding - draft
+      if (message.channel.type == 'dm'){ //checks for DM
+        let dmName = `${nick}DM`
+        staffchat = member.guild.channels.find('name', 'staff');
+
+        message.staffchat.send({embed: { //forwards DM to staff chat
+          color: 0xff0000,
+          title: "DM Forwarded" ,
+         description: dm.content ,
+         timestamp: new Date(),
+          footer: {
+          icon_url: sender.avatarURL,
+          text: `by ${dmName}`
+          }
+        }})
+      };
 
 
     //EVAL! DO NOT FUCKING TOUCH THAT SHIT IF YOU ARE NOT RINKKY!
@@ -222,6 +319,18 @@ bot.on('message', async message => {
     };
 
 }); //the end of bot.on ------------------------------
+
+
+/*one time event function
+  function onetime(node, type, callback) {
+    //create event
+    node.addEventListener(type, function(e) {
+      //remove event
+      e.target.removeEventListener(e, type, arguments.callee)
+        //call gandler
+        return callback(e)
+    })
+  } draaaaaft*/
 
 function clean(text) {
   if (typeof(text) === "string")
