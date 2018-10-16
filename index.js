@@ -114,6 +114,11 @@ bot.on('message', async message => {
         message.member.addRole('501891504793452575');
         await message.reply('I have given you the ping role!')
     }
+    //remove ping role
+    if (msg === prefix + "rpingrole"){
+        message.member.removeRole('501891504793452575');
+        await message.reply('I have removed the ping role from you!')
+    }
 
     //bot info command
     if (msg === prefix + "botinfo") {
