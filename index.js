@@ -108,7 +108,12 @@ bot.on('message', async message => {
     //function timedMessage() {
       //generalchat.send(`Topic of the week: `)
       //.catch(console.error)};
-
+    
+    //get ping role
+    if (msg === prefix + "pingrole"){
+        message.member.addRole('501891504793452575');
+        await message.reply('I have given you the ping role!')
+    }
 
     //bot info command
     if (msg === prefix + "botinfo") {
