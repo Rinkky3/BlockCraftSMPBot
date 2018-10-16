@@ -77,7 +77,7 @@ bot.on('message', async message => {
         let m = await message.channel.send("Ping?");
         m.edit(`Pong. Latency: ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
       } else {return}
-    }
+    };
 
 
     //Single Poll
@@ -113,12 +113,12 @@ bot.on('message', async message => {
     if (msg === prefix + "pingrole"){
         message.member.addRole('501891504793452575');
         await message.reply('I have given you the ping role!')
-    }
+    };
     //remove ping role
     if (msg === prefix + "rpingrole"){
         message.member.removeRole('501891504793452575');
         await message.reply('I have removed the ping role from you!')
-    }
+    };
 
     //bot info command
     if (msg === prefix + "botinfo") {
