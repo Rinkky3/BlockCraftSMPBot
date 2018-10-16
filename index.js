@@ -4,9 +4,10 @@ const bot = new Discord.Client();
 const fs = require('fs');
 const moment = require('moment') // the moment package. to make this work u need to run "npm install moment --save 
 const ms = require("ms") // npm install ms -s
+const config = require("./config.json")
 
 // json files
-let userData = JSON.parse(fs.readFileSync("storage/userData.json", "utf8"))
+let userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
 
 // Listener Event: Bot Launched
 bot.on('ready', () => {
