@@ -7,7 +7,7 @@ const ms = require("ms") // npm install ms -s
 
 
 // json files
-let userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
+var userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
 
 // Listener Event: Bot Launched
 bot.on('ready', () => {
@@ -77,7 +77,15 @@ bot.on('message', async message => {
         let m = await message.channel.send("Ping?");
         m.edit(`Pong. Latency: ${m.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(bot.ping)}ms`);
       } else {return}
-    };
+    }
+    
+    // leaderboard
+    if (msg === prefix + "lb" || msg === prefix + "leaderboard"){
+        let lb = new Discord.RichEmbed()
+        .setDescription('**___Leaderboard___**')
+        .setColor(0x15f153)
+        message.channel.send(lb)
+    }
 
 
     //Single Poll
@@ -99,6 +107,17 @@ bot.on('message', async message => {
         } else {return};
       };
 
+    //get ping role
+    if (msg === prefix + "pingrole"){
+        message.member.addRole('501888773710282755');
+        await message.reply('I have given you the ping role!')
+    };
+    
+    //remove ping role
+    if (msg === prefix + "rpingrole"){
+        message.member.removeRole('501888773710282755');
+        await message.reply('I have removed the ping role from you!')
+    };
 
     //timed message
     //const generalchat = bot.channels.get("469490700845580298")
@@ -108,17 +127,7 @@ bot.on('message', async message => {
     //function timedMessage() {
       //generalchat.send(`Topic of the week: `)
       //.catch(console.error)};
-    
-    //get ping role
-    if (msg === prefix + "pingrole"){
-        message.member.addRole('501891504793452575');
-        await message.reply('I have given you the ping role!')
-    };
-    //remove ping role
-    if (msg === prefix + "rpingrole"){
-        message.member.removeRole('501891504793452575');
-        await message.reply('I have removed the ping role from you!')
-    };
+
 
     //bot info command
     if (msg === prefix + "botinfo") {
@@ -137,7 +146,7 @@ bot.on('message', async message => {
 
     //serverinfo command
     if (msg === prefix + "serverinfo") {
-      let sicon = message.guild.displayAvatarURL
+      let sicon = message.guild.iconURL
         
         let serverembed = new Discord.RichEmbed()
         .setDescription("__**Server Information**__")
@@ -146,7 +155,7 @@ bot.on('message', async message => {
         .addField("Server Name", message.guild.name)
         .addField("Created On", message.guild.createdAt)
         .addField("Total Members", message.guild.memberCount)
-        .addField("Emoji", guild.emojis + "*work in progress*")
+        .addField("Emoji", message.guild.emojis + "*work in progress*")
 
         await message.channel.send(serverembed)
 
@@ -192,7 +201,6 @@ bot.on('message', async message => {
               await message.channel.send(roleembed)
 
         }; 
-
 
 
     //reports
@@ -257,7 +265,7 @@ bot.on('message', async message => {
     const coin =  Math.floor((Math.random() * 2) + 1);
 
     if (msg === prefix + 'coinflip') {
-        let m = await message.channel.send("**Flips a coin:** \n Commands: __`guess D__ - __`guess N__")
+        let m = await message.channel.send("**Flips a coin:** \n Commands: __\`guess D__ - __\`guess N__")
     };
 
           //Diamonds
@@ -288,24 +296,60 @@ bot.on('message', async message => {
           }
         };
     
-        // Dice roll guess
-        const roll =  Math.floor((Math.random() * 6) + 1);
-        if(msg.split(" ")[0] === prefix + "diceroll"){
-            let args = msg.split(" ").slice(1)
-            if(args >=1 && args <= 6){
-                if(args == roll + 1 || args == roll - 1 || args == roll){
-                    let m = await message.reply("You guessed in a range of 1 and were correct!",
-                    userData[sender.id].money = (userData[sender.id].money+150))
-                    let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
-                }else{
-                    let m = await message.reply("You guessed in a range of 1 and were incorrect!",
-                    userData[sender.id].money = (userData[sender.id].money-50))
-                    let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
-                }
+    // Dice roll guess
+    const roll =  Math.floor((Math.random() * 6) + 1);
+    if(msg.split(" ")[0] === prefix + "diceroll"){
+        let args = msg.split(" ").slice(1)
+        if(args >=1 && args <= 6){
+            if(args == roll + 1 || args == roll - 1 || args == roll){
+                let m = await message.reply("You guessed in a range of 1 and were correct!",
+                userData[sender.id].money = (userData[sender.id].money+150))
+                let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
             }else{
-                return message.reply('Please enter a number between 1 and 6')
+                let m = await message.reply("You guessed in a range of 1 and were incorrect!",
+                userData[sender.id].money = (userData[sender.id].money-50))
+                let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
             }
-           };
+        }else{
+            return message.reply('Please enter a number between 1 and 6')
+        }
+       };
+    
+    // Add money
+    if(msg.split(" ")[0] === prefix + "addmoney"){
+        let args = msg.split(" ").slice(1)
+        let rUser = message.mentions.users.first()
+        if(!rUser){
+           return message.reply('Who is this person?')
+        }
+        let userId = rUser.id
+        let addedmoney = Number(args[1]);
+        if(addedmoney > 1){
+            let m = await message.reply("You added " + addedmoney + " to " + rUser,
+            userData[userId].money = (userData[userId].money + addedmoney))
+            let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money} insert super secret emoji here`)
+        }else{
+            return message.reply('Please enter a number greater than 1')
+        }
+    };
+    
+    // Remove money
+    if(msg.split(" ")[0] === prefix + "addmoney"){
+        let args = msg.split(" ").slice(1)
+        let rUser = message.mentions.users.first()
+        if(!rUser){
+           return message.reply('Who is this person?')
+        }
+        let userId = rUser.id
+        let addedmoney = Number(args[1]);
+        if(addedmoney > 1){
+            let m = await message.reply("You removed " + addedmoney + " from " + rUser,
+            userData[userId].money = (userData[userId].money - addedmoney))
+            let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money} insert super secret emoji here`)
+        }else{
+            return message.reply('Please enter a number greater than 1')
+        }
+    };
 
     
     //8ball
