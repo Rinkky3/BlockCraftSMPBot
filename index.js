@@ -177,6 +177,7 @@ bot.on('message', async message => {
     //role info
     if (msg.split(" ")[0] === prefix + "roleinfo") {
           //ex `roleinfo @owner
+          //let args = msg.split(" ").slice(1)
           let rRole = message.mentions.roles.first()
                                            
             if(!rRole)
@@ -187,9 +188,11 @@ bot.on('message', async message => {
               .setColor(0x15f153)
               .addField("Name", rRole)
               .addField("ID", rRole.id)
+              .addField("Members with this role:", message.guild.roles.get(rRole.id).members.map(m=>m.user.tag).join('\n'));
               await message.channel.send(roleembed)
 
         }; 
+
 
 
     //reports
