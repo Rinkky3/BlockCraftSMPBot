@@ -284,6 +284,25 @@ bot.on('message', async message => {
             let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
           }
         };
+    
+        // Dice roll guess
+        const roll =  Math.floor((Math.random() * 6) + 1);
+        if(msg.split(" ")[0] === prefix + "diceroll"){
+            let args = msg.split(" ").slice(1)
+            if(args >=1 && args <= 6){
+                if(args == roll + 1 || args == roll - 1 || args == roll){
+                    let m = await message.reply("You guessed in a range of 1 and were correct!",
+                    userData[sender.id].money = (userData[sender.id].money+150))
+                    let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
+                }else{
+                    let m = await message.reply("You guessed in a range of 1 and were incorrect!",
+                    userData[sender.id].money = (userData[sender.id].money-50))
+                    let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
+                }
+            }else{
+                return message.reply('Please enter a number between 1 and 6')
+            }
+           };
 
     
     //8ball
