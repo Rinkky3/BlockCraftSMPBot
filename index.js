@@ -85,7 +85,7 @@ bot.on('message', async message => {
         .setDescription('**___Leaderboard___**')
         .setColor(0x15f153)
         message.channel.send(lb)
-    }
+    };
     
     // Delete msgs
     if (msg.split(" ")[0] === prefix + "mdelete"){
@@ -98,7 +98,6 @@ bot.on('message', async message => {
         message.channel.send("Deleted " + num + " messages.").then(msg => msg.delete(3000));
         });
     };
-
 
     //Single Poll
     if (msg.startsWith("poll:")) {
@@ -329,38 +328,42 @@ bot.on('message', async message => {
     
     // Add money
     if(msg.split(" ")[0] === prefix + "addmoney"){
-        let args = msg.split(" ").slice(1)
-        let rUser = message.mentions.users.first()
-        if(!rUser){
-           return message.reply('Who is this person?')
-        }
-        let userId = rUser.id
-        let addedmoney = Number(args[1]);
-        if(addedmoney > 1){
-            let m = await message.reply("You added " + addedmoney + " to " + rUser,
-            userData[userId].money = (userData[userId].money + addedmoney))
-            let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money} insert super secret emoji here`)
-        }else{
-            return message.reply('Please enter a number greater than 1')
-        }
+        if(sender.id === "186487324517859328" || message.member.roles.has(Owner.id)) {
+            let args = msg.split(" ").slice(1)
+            let rUser = message.mentions.users.first()
+            if(!rUser){
+               return message.reply('Who is this person?')
+            }
+            let userId = rUser.id
+            let addedmoney = Number(args[1]);
+            if(addedmoney > 1){
+                let m = await message.reply("You added " + addedmoney + " to " + rUser,
+                userData[userId].money = (userData[userId].money + addedmoney))
+                let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money} insert super secret emoji here`)
+            }else{
+                return message.reply('Please enter a number greater than 1')
+            }
+        }else {return}
     };
     
     // Remove money
-    if(msg.split(" ")[0] === prefix + "addmoney"){
-        let args = msg.split(" ").slice(1)
-        let rUser = message.mentions.users.first()
-        if(!rUser){
-           return message.reply('Who is this person?')
-        }
-        let userId = rUser.id
-        let addedmoney = Number(args[1]);
-        if(addedmoney > 1){
-            let m = await message.reply("You removed " + addedmoney + " from " + rUser,
-            userData[userId].money = (userData[userId].money - addedmoney))
-            let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money} insert super secret emoji here`)
-        }else{
-            return message.reply('Please enter a number greater than 1')
-        }
+    if(msg.split(" ")[0] === prefix + "removemoney"){
+        if(sender.id === "186487324517859328" || message.member.roles.has(Owner.id)) {
+            let args = msg.split(" ").slice(1)
+            let rUser = message.mentions.users.first()
+            if(!rUser){
+               return message.reply('Who is this person?')
+            }
+            let userId = rUser.id
+            let addedmoney = Number(args[1]);
+            if(addedmoney > 1){
+                let m = await message.reply("You removed " + addedmoney + " from " + rUser,
+                userData[userId].money = (userData[userId].money - addedmoney))
+                let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money} insert super secret emoji here`)
+            }else{
+                return message.reply('Please enter a number greater than 1')
+            }
+        }else {return}
     };
 
     
