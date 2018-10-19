@@ -256,9 +256,14 @@ bot.on('message', async message => {
           var numMembers = rmembers.length
           console.log(rmembers)
           console.log(numMembers)
-          if(!rmembers){
-              rmembers = "None"
-              numMembers = 0
+          if(numMembers == 0) {
+           let roleembed = new Discord.RichEmbed()
+          .setDescription("__**Role Information**__")
+          .setColor(0x15f153)
+          .addField("Name", rRole)
+          .addField("ID", rRole.id)
+          .addField(`Members with this role (${numMembers}):`, "None");
+          await message.channel.send(roleembed) 
           }
           let roleembed = new Discord.RichEmbed()
           .setDescription("__**Role Information**__")
