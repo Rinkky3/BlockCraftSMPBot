@@ -1,5 +1,4 @@
-﻿
-// Calling the package
+﻿// Calling the package
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const fs = require('fs');
@@ -101,10 +100,10 @@ bot.on('message', async message => {
  
     // Deny
     if (msg.split(" ")[0] === prefix + "deny"){
-      message.delete()
       let args = msg.split(" ").slice(1)
       let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
       let rreason = args.join(" ").slice(22)
+      message.delete()
       if (!message.member.roles.has(Owner.id) && !message.member.roles.has(Staff.id)) return message.channel.send("You do not have access to this command")
       if (!rUser) return message.channel.send('This user doesn\'t exist')
       let denyEmbed = new Discord.RichEmbed()
@@ -118,10 +117,10 @@ bot.on('message', async message => {
     
     // Accept
     if (msg.split(" ")[0] === prefix + "accept"){
-      message.delete()
       let pending = message.guild.roles.find('name', "In-Progress")    
       let args = msg.split(" ").slice(1)
       let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
+      message.delete()
       if (!message.member.roles.has(Owner.id) && !message.member.roles.has(Staff.id)) return message.channel.send("You do not have access to this command")
       if (!rUser) return message.channel.send('This user doesn\'t exist')
       rUser.addRole(PlayerRole.id);
