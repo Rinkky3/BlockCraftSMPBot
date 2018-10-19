@@ -89,7 +89,8 @@ bot.on('message', async message => {
         let pending = message.guild.roles.find('name', "In-Progress")    
         if (!message.member.roles.has(pending.id)) return message.channel.send(sender + ", you are not in progress!")
         let m = await message.reply('I have notified the staff that you have applied, please ensure that you\'re answers are at least a paragraph long, if they are not, your application will be discarded.')
-
+        
+        let m1 = await appchannel.send(`<@&${Staff.id}>`)
         let applyEmbed = new Discord.RichEmbed()
         .setDescription("**___New application___**")
         .setColor(0x15f153)
@@ -305,7 +306,7 @@ bot.on('message', async message => {
               })
     };
 
-    //GAMBLING SHIT
+    //GAMBLING STUFF
 
     // bal access
     if (msg === prefix + 'bal') {
@@ -477,7 +478,7 @@ bot.on('message', async message => {
       };
 
 
-    //EVAL! DO NOT FUCKING TOUCH THAT SHIT IF YOU ARE NOT RINKKY!
+    // I no touch dw
 
     if (msg.startsWith(prefix + "eval")) {
       if(sender.id !== "186487324517859328") return;
