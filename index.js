@@ -84,6 +84,9 @@ bot.on('message', async message => {
       } else {return}
     };
     
+    // Leaderboard
+    
+    
     // Applications and stuff
     if (msg === prefix + 'applied'){
         let appchannel = message.guild.channels.find(`name`, "staff")
@@ -270,21 +273,26 @@ bot.on('message', async message => {
           //ex `roleinfo @owner
           //let args = msg.split(" ").slice(1)
           let rRole = message.mentions.roles.first()
-          let args = msg.split(" ").slice(1)
-          let rmembers = message.guild.roles.get(rRole.id).members.map.length - 1                          
-            if(!rRole)
-              return message.reply("Who dat role? I cant find it.")
-
-              let roleembed = new Discord.RichEmbed()
-              .setDescription("__**Role Information**__")
-              .setColor(0x15f153)
-              .addField("Name", rRole)
-              .addField("ID", rRole.id)
-              .addField(`Members with this role (${rmembers}):`, message.guild.roles.get(rRole.id).members.map(m=>m.user.tag).join('\n'));
-              await message.channel.send(roleembed) 
-
-        }; 
-
+          if(!rRole) return message.reply("Who dat role? I cant find it.")
+          var rmembers = message.guild.roles.get(rRole.id).members.map(m=>m.user.tag)
+          var numMembers = rmembers.length
+          if(numMembers == 0) {
+           let roleembed = new Discord.RichEmbed()
+          .setDescription("__**Role Information**__")
+          .setColor(0x15f153)
+          .addField("Name", rRole)
+          .addField("ID", rRole.id)
+          .addField(`Members with this role (${numMembers}):`, "None");
+          await message.channel.send(roleembed) 
+          }
+          let roleembed = new Discord.RichEmbed()
+          .setDescription("__**Role Information**__")
+          .setColor(0x15f153)
+          .addField("Name", rRole)
+          .addField("ID", rRole.id)
+          .addField(`Members with this role (${numMembers}):`, rmembers.join('\n'));
+          await message.channel.send(roleembed) 
+    };
 
     //reports
     if (msg.split(" ")[0] === prefix + "report") {
@@ -372,7 +380,7 @@ bot.on('message', async message => {
             let m = await message.reply('The coin landed on Nuggets, You won!',// {files: ["Storage/images/nugget.png"]})
             userData[sender.id].money = (userData[sender.id].money+300))
             let m1 = await message.channel.send(` You now have: ${userData[sender.id].money} insert super secret emoji here`)
-          } else if (coin >= 2) {
+            } else if (coin >= 2) {
             let m = await message.reply("The coin landed on Diamonds, you lost. ",// {files: ["Storage/images/diamond.png"]})
             userData[sender.id].money = (userData[sender.id].money-150))
             let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
@@ -409,7 +417,6 @@ bot.on('message', async message => {
             let m = await message.reply("You worked so hard and received " + money,
             userData[sender.id].money = (userData[sender.id].money+money))
             let m1 = await message.channel.send(`You now have: ${userData[sender.id].money} insert super secret emoji here`)
-
             workCooldown.add(sender.id);
             setTimeout(() => {
               workCooldown.delete(sender.id);
