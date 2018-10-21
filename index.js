@@ -521,8 +521,7 @@ bot.on('message', async message => {
     
     
     // MUSIC STUFF
-    
-    // Play
+
     const serverQueue = queue.get(message.guild.id);
     if(message.content.split(" ")[0] === prefix + "play"){
         let args = message.content.split(" ").slice(1)
