@@ -2,11 +2,16 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const fs = require('fs');
-const moment = require('moment') // the moment package. to make this work u need to run "npm install moment --save 
-const ms = require("ms") // npm install ms -s
+const moment = require('moment'); // the moment package. to make this work u need to run "npm install moment --save 
+const ms = require("ms"); // npm install ms -s
+const ytdl = require("ytdl-core");
+const opus = require("opusscript");
+const YouTube = require("simple-youtube-api")
 
 // Okay, i wont worry about it ;)
 const workCooldown = new Set();
+const queue = new Map();
+const youtube = new YouTube(process.env.ytapi)
 
 // json files
 var userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
@@ -31,7 +36,7 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
   let ivc = newMember.guild.roles.find("name", "In Voice Call");
   
   if(oldUserChannel === undefined && newUserChannel !== undefined) { // User Joins a voice channel
-        newMember.addRole(ivc).catch(console.error);
+    newMember.addRole(ivc).catch(console.error);
   } else if(newUserChannel === undefined) { // User leaves a voice channel
     newMember.removeRole(ivc).catch(console.error);
   }
@@ -52,7 +57,6 @@ bot.on('guildMemberAdd', member => {
 
 // Event listener: Message Received ( This will run every time a message is received)
 bot.on('message', async message => {
-
     // Variables
     let sender = message.author; // The person who sent the message
     let msg = message.content.toLowerCase();
@@ -74,6 +78,7 @@ bot.on('message', async message => {
         if (err) console.error(err)
     });
 
+    
     // commands
 
     // Ping / Pong command
@@ -85,7 +90,30 @@ bot.on('message', async message => {
     };
     
     // Leaderboard
-    
+    if (msg === prefix + "leaderboard"){
+        let usersmoney = []
+        let num = 0
+        for (user in userData) {
+            if(num < 9){
+                console.log(user)
+                let username = userData[user].username
+                let users = `${username}`
+                let money = (userData[user].money)
+                usersmoney[num] = money + " -> " + users
+                console.log(users)
+                console.log(money)
+                console.log(usersmoney[num])
+                usersmoney.sort(function(a, b){return a - b});
+                num++
+            }
+        }
+        usersmoney.sort(function(a, b){return a - b});
+        let lbembed = new Discord.RichEmbed()
+        .setDescription("**___Leaderboard___**")
+        .setColor(0x15f153)
+        .addField("Leaderboard:", usersmoney)
+        message.channel.send(lbembed)
+    };
     
     // Applications and stuff
     if (msg === prefix + 'applied'){
@@ -430,6 +458,11 @@ bot.on('message', async message => {
         if(sender.id === "186487324517859328" || message.member.roles.has(Owner.id)) {
             let args = msg.split(" ").slice(1)
             let rUser = message.mentions.users.first()
+            if (!userData[rUser.id]) userData[sender.id] = {}
+            if (!userData[rUser.id].money) userData[sender.id].money = 0;
+            if (!userData[rUser.id].SP) userData[sender.id].SP = 0;
+            if (!userData[rUser.id].appsNumber) userData[sender.id].appsNumber = 0;
+            if (!userData[rUser.id].username) userData[sender.id].username = sender.username;
             if(!rUser){
                return message.reply('Who is this person?')
             }
@@ -485,7 +518,91 @@ bot.on('message', async message => {
           message.send("No leaks for future events? Open your eyes, chinese man. Rinkky Teases thinks all day and night. He cant keep his mounth shut.")
         }
       };
-
+    
+    
+    // MUSIC STUFF
+    
+    // Play
+    const serverQueue = queue.get(message.guild.id);
+    if(message.content.split(" ")[0] === prefix + "play"){
+        let args = message.content.split(" ").slice(1)
+        const searchString = args.join(' ')
+        const voiceChannel = message.member.voiceChannel;
+        if(!voiceChannel) return message.channel.send('You need to be in a voice channel to execute this command!')
+        const permissions = voiceChannel.permissionsFor(bot.user)
+        if(!permissions.has('CONNECT')) return message.channel.send('I can\'t connect here, how do you expect me to play music?')
+        if(!permissions.has('SPEAK')) return message.channel.send('I can\'t speak here, how do you expect me to play music?')
+        
+        if(args[0].match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)){
+            const playlist = await youtube.getPlaylist(args[0]);
+            var videos = await playlist.getVideos();
+            for(const video of Object.values(videos)){
+                var video2 = await youtube.getVideoByID(video.id);
+                await handleVideo(video2, message, voiceChannel, true)
+            }
+            return message.channel.send(`Playlist: **${playlist.title}** has been added to the queue!`);
+        }else{
+            try{
+                var video = await youtube.getVideo(args[0])
+            }catch(error){
+                try{
+                    var videos = await youtube.searchVideos(searchString, 10);
+                    let index = 0;
+                    let videosEmbed = new Discord.RichEmbed()
+                    .setDescription("Song selection")
+                    .setColor(0x15f153)
+                    .addField("Songs:", videos.map(video2 => `**${++index} -** ${video2.title}`))
+                    message.channel.send(videosEmbed)
+                    message.channel.send("Please provide a value from 1 to 10 to select a video! You have 10 seconds")
+                    try{
+                        var response = await message.channel.awaitMessages(message2 => message2.content > 0 && message2.content < 11, {
+                      		      maxMatches: 1,
+					time: 10000,
+					errors: ['time']
+				});
+                    }catch(err){
+                        return message.channel.send('No value given, or value was invalid, video selection canceled.')
+                    }
+                    var video = await youtube.getVideoByID(videos[videoIndex - 1].id);
+                }catch(err){
+                    console.log(err)
+                    return message.channel.send("Sorry bro, cant find any results!");
+                }
+            }
+            return handleVideo(video, message, voiceChannel);
+        }
+    } else if(msg === prefix + "mstop"){
+        if(!message.member.voiceChannel) return message.channel.send("You aren't in a voice channel!")
+        if(!serverQueue) return message.channel.send("Nothing is playing!")
+        queue.delete(message.guild.id)
+        serverQueue.voiceChannel.leave();
+        return message.channel.send("Good bye!");
+    }else if(msg === prefix + "skip"){
+        if(!message.member.voiceChannel) return message.channel.send("You aren't in a voice channel!")
+        if(!serverQueue) return message.channel.send("Nothing is playing!")
+        serverQueue.connection.dispatcher.end();
+        return undefined;
+    }else if(msg === prefix + "np"){
+        if(!serverQueue) return message.channel.send("Nothing is playing!")
+        
+        return message.channel.send(`Now playing: **${serverQueue.songs[0].title}**`)
+    }else if(msg.split(" ")[0] === prefix + "volume"){
+        let args = msg.split(" ").slice(1)
+        if(!message.member.voiceChannel) return message.channel.send("You aren't in a voice channel!")
+        if(!serverQueue) return message.channel.send("Nothing is playing!");
+        if(!args[0]) return message.channel.send(`The current volume is **${serverQueue.volume}**`);
+        serverQueue.connection.dispatcher.setVolumeLogarithmic(args[0] / 5)
+        serverQueue.volume = args[0];
+        return message.channel.send(`I set the volume to: **${args[0]}**`);
+    }else if(msg === prefix + "queue"){
+        if(!serverQueue) return message.channel.send("Nothing is playing!");
+        let queueEmbed = new Discord.RichEmbed()
+        .setDescription("Queue")
+        .setColor(0x15f153)
+        .addField("Now playing:", `**${serverQueue.songs[0].title}**`)
+        .addField("Songs:", serverQueue.songs.map(song => `**-** ${song.title}`))
+        return message.channel.send(queueEmbed)
+    }
 
       //DM forwarding - draft
       if (message.channel.type == 'dm'){ //checks for DM
@@ -550,6 +667,62 @@ function clean(text) {
     return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
   else
       return text;
+}
+
+async function handleVideo(video, message, voiceChannel, playlist = false){
+    const serverQueue = queue.get(message.guild.id)
+    const song = {
+                id: video.id,
+                title: video.title,
+                url: `https://www.youtube.com/watch?v=${video.id}`
+            }
+        
+    if(!serverQueue) {
+        const queueConstruct = {
+            textChannel: message.channel,
+            voiceChannel: voiceChannel,
+            connection: null,
+            songs: [],
+            volume: 5,
+            playing: true
+        };
+        queue.set(message.guild.id, queueConstruct);
+        queueConstruct.songs.push(song);
+        message.channel.send(`Yo bro, you wont believe it ${song.title} has been added to the queue`)
+        try {
+            var connection = await voiceChannel.join();
+            queueConstruct.connection = connection;
+            play(message.guild, queueConstruct.songs[0]);
+        } catch (error) {
+            console.error(error)
+            queue.delete(message.guild.id)
+            return message.channel.send('Sorry bro, there was an error')
+        }
+    } else {
+        serverQueue.songs.push(song);
+        if(playlist) return undefined
+        return message.channel.send(`Yo bro, you wont believe it ${song.title} has been added to the queue`)
+    }
+    return undefined;
+}
+
+function play(guild, song){
+    const serverQueue = queue.get(guild.id)
+    
+    if(!song){
+        serverQueue.voiceChannel.leave();
+        queue.delete(guild.id);
+        return
+    }
+    const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
+        .on('end', () =>{
+                console.log('Song ended');
+                serverQueue.songs.shift();
+                play(guild, serverQueue.songs[0]);
+            })
+        .on('error', error => console.error(error));
+    dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
+    serverQueue.textChannel.send(`Now playing: **${song.title}**`)
 }
 
 //  Login
