@@ -590,7 +590,8 @@ bot.on('message', async message => {
 	    voiceChannel.members.forEach(function() {
   		 voteSkipPass++;
 	    })
-	    var voteSkip = Math.floor((voteSkipPass - .5)/2);
+	    console.log(voteSkipPass)
+	    var voteSkip = Math.floor((voteSkipPass - .4)/2);
 	    if(voteSkip === 0) voteSkip = 1;
 	    console.log('Vote skip ' + voteSkip)
 	    console.log(voted)
