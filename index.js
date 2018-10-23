@@ -13,6 +13,8 @@ const workCooldown = new Set();
 const queue = new Map();
 const youtube = new YouTube(process.env.ytapi)
 var stopping = false;
+var voteSkipPass = 0;
+var voted = 0;
 
 // json files
 var userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
@@ -581,9 +583,25 @@ bot.on('message', async message => {
 	serverQueue.voiceChannel.leave();
         return undefined;
     }else if(msg === prefix + "skip"){
-        if(!message.member.voiceChannel) return message.channel.send("You aren't in a voice channel!")
-        if(!serverQueue) return message.channel.send("Nothing is playing!")
-        serverQueue.connection.dispatcher.end();
+            if(!message.member.voiceChannel) return await message.channel.send("You aren't in a voice channel!")
+            if(!serverQueue) return await message.channel.send("Nothing is playing!")
+	    const voiceChannel = message.member.voiceChannel;
+	    voted++;
+	    voiceChannel.members.forEach(function() {
+  		 voteSkipPass++;
+	    })
+	    var voteSkip = Math.floor((voteSkipPass - 1)/2);
+	    if(voteSkip === 0) voteSkip = 1;
+	    console.log('Vote skip ' + voteSkip)
+	    console.log(voted)
+	    if(voted >= voteSkip){
+		await message.channel.send('Vote skip has passed!')
+	    	serverQueue.connection.dispatcher.end();
+		voted = 0;
+		voteSkipPass = 0;
+	    }else{
+	    	await message.channel.send(voted + '\/' + voteSkip + ' players voted to skip!')
+	    }
         return undefined;
     }else if(msg === prefix + "np"){
         if(!serverQueue) return message.channel.send("Nothing is playing!")
