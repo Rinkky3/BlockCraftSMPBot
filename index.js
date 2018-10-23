@@ -593,7 +593,7 @@ bot.on('message', async message => {
 		    })
 	    }
 	    console.log(voteSkipPass)
-	    var voteSkipPass1 = voteSkip - .5
+	    var voteSkipPass1 = voteSkipPass - .5;
 	    console.log(voteSkipPass1)
 	    var voteSkip = Math.floor(voteSkipPass1/2);
 	    if(voteSkip === 0) voteSkip = 1;
