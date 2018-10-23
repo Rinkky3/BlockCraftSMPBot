@@ -15,6 +15,7 @@ const youtube = new YouTube(process.env.ytapi)
 var stopping = false;
 var voteSkipPass = 0;
 var voted = 0;
+var playerVoted = [];
 
 // json files
 var userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
@@ -586,7 +587,14 @@ bot.on('message', async message => {
             if(!message.member.voiceChannel) return await message.channel.send("You aren't in a voice channel!")
             if(!serverQueue) return await message.channel.send("Nothing is playing!")
 	    const voiceChannel = message.member.voiceChannel;
+	    for (var x = 0; x < playerVoted.length; x++) {
+	    	if(sender === playerVoted[x]){
+			return message.channel.send(`${sender.username}, you think you run the place? You cant vote twice!`)
+		}
+	    }
 	    voted++;
+	    playerVoted.push(sender);
+	    console.log(playerVoted);
 	    if(voteSkipPass === 0){
 		    voiceChannel.members.forEach(function() {
 			 voteSkipPass++;
