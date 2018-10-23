@@ -755,6 +755,9 @@ function play(guild, song){
 		if(!serverQueue.songs){
 		        serverQueue.voiceChannel.leave();
         		queue.delete(guild.id);
+			voted = 0;
+			voteSkipPass = 0;
+			playerVoted = [];
         		return undefined;
 		}
 		serverQueue.songs.shift();
