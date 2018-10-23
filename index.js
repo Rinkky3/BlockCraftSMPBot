@@ -594,25 +594,20 @@ bot.on('message', async message => {
 	    }
 	    voted++;
 	    playerVoted.push(sender);
-	    console.log(playerVoted);
 	    if(voteSkipPass === 0){
 		    voiceChannel.members.forEach(function() {
 			 voteSkipPass++;
 		    })
 	    }
-	    console.log(voteSkipPass)
 	    var voteSkipPass1 = voteSkipPass - 1;
-	    console.log(voteSkipPass1)
 	    var voteSkip = Math.floor(voteSkipPass1/2);
-	    console.log(voteSkip)
 	    if(voteSkip === 0) voteSkip = 1;
-	    console.log('Vote skip ' + voteSkip)
-	    console.log(voted)
 	    if(voted >= voteSkip){
 		await message.channel.send('Vote skip has passed!')
 	    	serverQueue.connection.dispatcher.end();
 		voted = 0;
 		voteSkipPass = 0;
+		playerVoted = [];
 	    }else{
 	    	await message.channel.send(voted + '\/' + voteSkip + ' players voted to skip!')
 	    }
@@ -763,6 +758,9 @@ function play(guild, song){
         		return undefined;
 		}
 		serverQueue.songs.shift();
+		voted = 0;
+		voteSkipPass = 0;
+		playerVoted = [];
                 play(guild, serverQueue.songs[0]);
             })
         .on('error', error => console.error(error));
