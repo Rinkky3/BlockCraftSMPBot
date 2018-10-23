@@ -587,11 +587,15 @@ bot.on('message', async message => {
             if(!serverQueue) return await message.channel.send("Nothing is playing!")
 	    const voiceChannel = message.member.voiceChannel;
 	    voted++;
-	    voiceChannel.members.forEach(function() {
-  		 voteSkipPass++;
-	    })
+	    if(voteSkipPass === 0){
+		    voiceChannel.members.forEach(function() {
+			 voteSkipPass++;
+		    })
+	    }
 	    console.log(voteSkipPass)
-	    var voteSkip = Math.floor((voteSkipPass - .4)/2);
+	    var voteSkipPass1 = voteSkip - .5
+	    console.log(voteSkipPass1)
+	    var voteSkip = Math.floor(voteSkipPass1/2);
 	    if(voteSkip === 0) voteSkip = 1;
 	    console.log('Vote skip ' + voteSkip)
 	    console.log(voted)
