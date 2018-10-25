@@ -1,4 +1,4 @@
-// Calling the package
+﻿// Calling the package
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const fs = require('fs');
@@ -9,7 +9,6 @@ const opus = require("opusscript");
 const YouTube = require("simple-youtube-api")
 
 // Okay, i wont worry about it ;)
-var coinflip = false;
 const workCooldown = new Set();
 const mutedSet = new Set();
 const queue = new Map();
@@ -714,13 +713,11 @@ bot.on('message', async message => {
 
     if (msg === prefix + 'coinflip') {
         let m = await message.channel.send("**Flips a coin:** \nCommands: ___guess D___ - ___guess N___")
-	coinflip = true;
     };
 
           //Diamonds
 
         if (msg === prefix + 'guess d' || msg === prefix + 'g d'  ) {
-	  if (!coinflip) return message.reply('You never flipped a coin! Do `coinflip')
           if (coin <= 1) {
             let m = await message.reply('The coin landed on Diamonds, You won!', {files: ["./storage/images/diamonds.png"]}) //128x128 images are ideal
             userData[sender.id].money = (userData[sender.id].money+300)
@@ -730,13 +727,11 @@ bot.on('message', async message => {
             userData[sender.id].money = (userData[sender.id].money-150)
             let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
           }
-	  coinflip = false;
         };
         
           //Nuggets
 
         if (msg === prefix + 'guess n' || msg === prefix + 'g n' ) {
-	  if (!coinflip) return message.reply('You never flipped a coin! Do `coinflip')
           if (coin <= 1) {
             let m = await message.reply('The coin landed on Nuggets, You won!', {files: ["./storage/images/nuggets.png"]})
             userData[sender.id].money = (userData[sender.id].money+300)
@@ -746,7 +741,6 @@ bot.on('message', async message => {
             userData[sender.id].money = (userData[sender.id].money-150)
             let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
           }
-	  coinflip = false;
         };
     
 
