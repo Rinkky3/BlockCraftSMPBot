@@ -59,7 +59,7 @@ bot.on('guildMemberAdd', member => {
     // Do nothing if the channel wasn't found on this server
     if (!channel) return;
     // Send the message, mentioning the member
-    channel.send(`Welcome ${member}! The applications are closer right now, but feel free to stay! We will be opening applications again the next season!`); //You can apply to get whitelisted, by clicking the link provided here: ${channelinfo}. Your answers must be a paragraph long. Good luck! 
+    channel.send(`Welcome ${member}! The applications are closed right now, but feel free to stay! We will be opening applications again the next season!`); //You can apply to get whitelisted, by clicking the link provided here: ${channelinfo}. Your answers must be a paragraph long. Good luck! 
     
   });
 
@@ -78,9 +78,6 @@ bot.on('message', async message => {
     let pingRole = message.guild.roles.find('name', "Ping")
     
     //json stuff
-    if (!userData[sender.id]) userData[sender.id] = {}
-    if (!userData[sender.id].money) userData[sender.id].money = 0;
-    if (!userData[sender.id].SP) userData[sender.id].SP = 0;
     if (!userData[sender.id].appsNumber) userData[sender.id].appsNumber = 0;
     if (!userData[sender.id].username) userData[sender.id].username = sender.username;
     if (!userData[sender.id].warns) userData[sender.id].warns = 0;
@@ -88,178 +85,6 @@ bot.on('message', async message => {
     fs.writeFile('./storage/userData.json', JSON.stringify(userData), (err) => {
         if (err) console.error(err)
     });
-	/*
-    //message filtering
-    const viollogs = bot.channels.get("428270869144403968")
-
-    for (x=0; x<profanities.length; x++) {
-      if (msg.includes(profanities[x])) {
-          if (bot.user.id === sender.id || "186487324517859328" === sender.id) { return }
-         
-          if (!violationsNumber[sender.id]) violationsNumber[sender.id] = {viol: 0};
-                    let userData = violationsNumber[sender.id];
-                    userData.viol++;
-
-                    fs.writeFile("./storage/violations.json", JSON.stringify(violationsNumber), (err) => {
-                      if (err) console.error(err)
-                    });
-                      let violationEmbed = {embed: {
-                        color: 0xff0000,
-                        title: "<:yikers:408342164922433556> **Profanity** Detected <:yikers:408342164922433556>",
-                        description: '**Message sent by **' + sender + '** deleted in **<#' + message.channel.id + "> \n" + `"${msg}"` + "\n \n" + `current violations: **${userData.viol}**`,
-                        timestamp: new Date(),
-                        footer: {
-                          icon_url: sender.avatarURL,
-                          text: `Username: ${nick} | ID: ${sender.id}`
-                        }
-                      }}
-
-              await message.delete()
-              .then(viollogs.send(violationEmbed))
-              .catch(console.error);
-
-              let tomute =  message.guild.members.get(sender.id)
-              let muterole = message.guild.roles.find(`name`, "muted" || `name`, "Muted");
-              
-              //start of create role
-              if(!muterole){
-                try{
-                  muterole = await message.guild.createRole({
-                    name: "muted",
-                    color: "#505050",
-                    permissions:[]
-                  })
-                  message.guild.channels.forEach(async (channel, id) => {
-                    await channel.overwritePermissions(muterole, {
-                      SEND_MESSAGES: false,
-                      ADD_REACTIONS: false
-                    })
-                  })
-                }catch(e){
-                  console.log(e.stack);
-                }
-              }
-              //end of create role
-              
-              await(tomute.addRole(muterole.id));
-              setTimeout(function(){
-               tomute.removeRole(muterole.id);
-              },(userData.viol * 60000))
-
-              await(message.reply("**You violated one of our rules and got one automatic violation strike.**")
-              .then(msg => {
-                msg.delete(25000)
-              }))
-              
-
-              if(userData.viol === 1) {
-                message.guild.members.get(sender.id)
-              .createDM()
-              .then(dm => {
-                dm.send({embed: {
-                  color: 0xff0000,
-                  title: "Informative DM" ,
-                 description: `You have violated our rules.\n  **Last Violation:** "${msg}" 
-                 \nThe more you violate our rules, the bigger the punishment will be.` ,
-                 timestamp: new Date(),
-                  footer: {
-                  icon_url: "186487324517859328".avatarURL,
-                  text: "Warning!"
-                  }
-                }}).catch(error)
-              })};
-
-            if(userData.viol === 10) {
-              message.guild.members.get(sender.id)
-              .createDM()
-              .then(dm => {
-                dm.send({embed: {
-                  color: 0xff0000,
-                  title: "<:stop:429234690893938698> Inappropriate Behaviour <:stop:429234690893938698>" ,
-                 description: `You have violated our rules many times as of now. **violations: 10** \nIf you continue to act like that you will be kicked, and then permabanned. \n\nLast Violation: ${msg}`,
-                 timestamp: new Date(),
-                  footer: {
-                  icon_url: "186487324517859328".avatarURL,
-                  text: "Warning!"
-                  }
-                }})
-              })
-              let reason = "The Account Has 10 Violations";
-              viollogs.send({embed: {
-                color: 0xff0000,
-                title: "**Automatic Warn Report**",
-                description: `**${reason}**`,
-                timestamp: new Date(),
-                footer: {
-                  icon_url: sender.avatarURL,
-                  text: `Username: ${nick} | ID: ${sender.id}`
-                }
-              }})
-            }
-          
-          if(userData.viol === 15) {
-            let reason = "The Account Has 15 Violations";
-            message.guild.members.get(sender.id)
-            .createDM()
-              .then(dm => {
-                dm.send({embed: {
-                  color: 0xff0000,
-                  title: "Kicked" ,
-                 description: `You have violated our rules many times as of now. **violations: 15** \nYou got kicked. Next punshment will be a permaban \n\nLast Violation: ${msg}`,
-                 timestamp: new Date(),
-                  footer: {
-                  icon_url: "186487324517859328".avatarURL,
-                  text: "Warning!"
-                  }
-                }})
-              })
-            message.guild.members.get(sender.id)
-            .kick(reason)
-              .catch(error => message.reply(`Sorry ${message.author} I couldn't kick because of : ${error}`));
-            viollogs.send({embed: {
-              color: 0xff0000,
-              title: "**Automatic Kick Report**",
-              description: `**${reason}**`,
-              timestamp: new Date(),
-              footer: {
-                icon_url: sender.avatarURL,
-                text: `Username: ${nick} | ID: ${sender.id}`
-              }
-            }})
-          }
-          
-          if(userData.viol === 20) {
-            let reason = "The Account Has 20 Violations";
-            message.guild.members.get(sender.id)
-            .createDM()
-              .then(dm => {
-                dm.send({embed: {
-                  color: 0xff0000,
-                  title: "Permanently Banned" ,
-                 description: `You have violated our rules many times as of now. **violations: 20** \nYou are permabanned. \n\nLast Violation: ${msg}`,
-                 timestamp: new Date(),
-                  footer: {
-                  icon_url: "186487324517859328".avatarURL,
-                  text: "Banned"
-                  }
-                }})
-              })
-            message.guild.members.get(sender.id)
-            .ban(reason)
-              .catch(error => viollogs.send(`I couldn't ban ${sender} because of : ${error}`));
-            viollogs.send({embed: {
-              color: 0xff0000,
-              title: "**Automatic Ban Report**",
-              description: `**${reason}**`,
-              timestamp: new Date(),
-              footer: {
-                icon_url: sender.avatarURL,
-                text: `Username: ${nick} | ID: ${sender.id}`
-              }
-            }})}
-            
-          return;
-      }};*/
 	
     
     // commands
@@ -345,38 +170,6 @@ bot.on('message', async message => {
 		.addField("Usage:", "`report @(member) (reason)")
 		.addField("Description:", "Report another user.")
 		return await message.channel.send(embed)
-	}    
-	if(args[0] === "coinflip"){
-		let embed = new Discord.RichEmbed()
-		.setDescription("Flip a coin")
-		.setColor(0x00fff3)
-		.addField("Usage:", "`coinflip")
-		.addField("Description:", "Flip a coin then guess what it landed on.")
-		return await message.channel.send(embed)
-	}    
-	if(args[0] === "diceroll"){
-		let embed = new Discord.RichEmbed()
-		.setDescription("Roll a die")
-		.setColor(0x00fff3)
-		.addField("Usage:", "`diceroll (number)")
-		.addField("Description:", "Roll a dice and guess the number it landed on.")
-		return await message.channel.send(embed)
-	}   
-	if(args[0] === "work"){
-		let embed = new Discord.RichEmbed()
-		.setDescription("Work")
-		.setColor(0x00fff3)
-		.addField("Usage:", "`work")
-		.addField("Description:", "Work for some cash.")
-		return await message.channel.send(embed)
-	}    
-	if(args[0] === "8ball"){
-		let embed = new Discord.RichEmbed()
-		.setDescription("Classic 8 ball")
-		.setColor(0x00fff3)
-		.addField("Usage:", "`8ball (Yes/No question)")
-		.addField("Description:", "Shake up that 8 ball and get the long awaited answer to a yes or no question 👽.")
-		return await message.channel.send(embed)
 	}   
 	if(args[0] === "play"){
 		let embed = new Discord.RichEmbed()
@@ -418,29 +211,10 @@ bot.on('message', async message => {
 		.addField("Description:", "See what tunes are in the queue.")
 		return await message.channel.send(embed)
 	}
-	if(args[0] === "leaderboard"){
-		let embed = new Discord.RichEmbed()
-		.setDescription("Get the leaderboard")
-		.setColor(0x00fff3)
-		.addField("Usage:", "`leaderboard")
-		.addField("Description:", "See who has the most money")
-		return await message.channel.send(embed)
-	}
 	if(args[0]) return message.channel.send("Hm. Check your spelling and try again!")
     };
     
 	
-    // Leaderboard
-	if(msg === prefix + "leaderboard"){
-		var arr = sortObject(userData)
-		console.log(arr.map(user => `**-** ${user.value}`))
-		let leaderboard = new Discord.RichEmbed()
-		.setDescription("**___Leaderboard___**")
-        	.setColor(0x15f153)
-		.addField("Leaderboard", arr.map(user => `${message.guild.member(user.key)} **-** $${user.value}`))
-		
-		return await message.channel.send(leaderboard)
-	};
     // Applications and stuff
     if (msg === prefix + 'applied'){
         let appchannel = message.guild.channels.find(`name`, "staff")
@@ -507,7 +281,7 @@ bot.on('message', async message => {
     };
 
     // Delete msgs
-    if (msg.split(" ")[0] === prefix + "mdelete"){
+    if (msg.split(" ")[0] === prefix + "purge"){
         if(sender.id === "186487324517859328" || message.member.roles.has(Owner.id)) {
             let args = msg.split(" ").slice(1)
             let num = Number(args[0]);
@@ -515,7 +289,7 @@ bot.on('message', async message => {
                 return message.reply('Please enter a number between 2 and 100')
             }
             message.channel.bulkDelete(num).then(() => {
-            message.channel.send("Deleted " + num + " messages.").then(msg => msg.delete(5300));
+            message.channel.send("Purged " + num + " messages.").then(msg => msg.delete(5300));
             });
         }else {return}
     };
@@ -689,158 +463,6 @@ bot.on('message', async message => {
                 }})
               })
     };
-
-    //GAMBLING STUFF
-
-    // bal access
-    if (msg === prefix + 'bal') {
-        let m = await message.channel.send({embed: {
-            color: 0x05ff00,
-            title: "Your balance",
-            description: `${userData[sender.id].money}<:BlockCoins:503678855068778496> \n${userData[sender.id].SP} Event Points`,
-            timestamp: new Date(),
-            footer: {
-              icon_url: sender.avatarURL
-            }
-          }
-        })
-    };
-
-
-    //coinguess game
-
-    const coin =  Math.floor((Math.random() * 2) + 1);
-
-    if (msg === prefix + 'coinflip') {
-        let m = await message.channel.send("**Flips a coin:** \nCommands: ___guess D___ - ___guess N___")
-    };
-
-          //Diamonds
-
-        if (msg === prefix + 'guess d' || msg === prefix + 'g d'  ) {
-          if (coin <= 1) {
-            let m = await message.reply('The coin landed on Diamonds, You won!', {files: ["./storage/images/diamonds.png"]}) //128x128 images are ideal
-            userData[sender.id].money = (userData[sender.id].money+300)
-            let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
-          } else if (coin >= 2) {
-            let m = await message.reply("The coin landed on Nuggets, you lost.", { files: ["./storage/images/nuggets.png"]})
-            userData[sender.id].money = (userData[sender.id].money-150)
-            let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
-          }
-        };
-        
-          //Nuggets
-
-        if (msg === prefix + 'guess n' || msg === prefix + 'g n' ) {
-          if (coin <= 1) {
-            let m = await message.reply('The coin landed on Nuggets, You won!', {files: ["./storage/images/nuggets.png"]})
-            userData[sender.id].money = (userData[sender.id].money+300)
-            let m1 = await message.channel.send(` You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
-            } else if (coin >= 2) {
-            let m = await message.reply("The coin landed on Diamonds, you lost. ", {files: ["./storage/images/diamonds.png"]})
-            userData[sender.id].money = (userData[sender.id].money-150)
-            let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
-          }
-        };
-    
-
-    // Dice roll guess
-    const roll =  Math.floor((Math.random() * 6) + 1);
-    if(msg.split(" ")[0] === prefix + "diceroll"){
-        let args = msg.split(" ").slice(1)
-        if(args >=1 && args <= 6){
-            if(args == roll + 1 || args == roll - 1 || args == roll){
-                let m = await message.reply("You guessed in a range of 1 and were correct!",
-                userData[sender.id].money = (userData[sender.id].money+150))
-                let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
-            }else{
-                let m = await message.reply("You guessed in a range of 1 and were incorrect!",
-                userData[sender.id].money = (userData[sender.id].money-50))
-                let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
-            }
-        }else{
-            return message.reply('Please enter a number between 1 and 6')
-        }
-    };
-    
-
-    // Work
-    if(msg === prefix + "work"){
-        if (workCooldown.has(sender.id)) {
-               return message.reply("You must wait 10 minutes before working again.");
-        } else {
-            let money = Math.floor((Math.random() * 801) + 200);
-            let m = await message.reply("You worked so hard and received " + money,
-            userData[sender.id].money = (userData[sender.id].money+money))
-            let m1 = await message.channel.send(`You now have: ${userData[sender.id].money}<:BlockCoins:503678855068778496>`)
-            workCooldown.add(sender.id);
-            setTimeout(() => {
-              workCooldown.delete(sender.id);
-            }, 600000);
-        }
-    };
-
-
-    // Add money
-    if(msg.split(" ")[0] === prefix + "addmoney"){
-        if(sender.id === "186487324517859328" || message.member.roles.has(Owner.id)) {
-            let args = msg.split(" ").slice(1)
-            let rUser = message.mentions.users.first()
-            if(!rUser){
-               return message.reply('Who is this person?')
-            }
-            let userId = rUser.id
-            let addedmoney = Number(args[1]);
-            if(addedmoney > 1){
-                let m = await message.reply("You added " + addedmoney + " to " + rUser,
-                userData[userId].money = (userData[userId].money + addedmoney))
-                let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money}<:BlockCoins:503678855068778496>`)
-            }else{
-                return message.reply('Please enter a number greater than 1')
-            }
-        }else {return}
-    };
-    
-
-    // Remove money
-    if(msg.split(" ")[0] === prefix + "removemoney"){
-        if(sender.id === "186487324517859328" || message.member.roles.has(Owner.id)) {
-            let args = msg.split(" ").slice(1)
-            let rUser = message.mentions.users.first()
-            if(!rUser){
-               return message.reply('Who is this person?')
-            }
-            let userId = rUser.id
-            let addedmoney = Number(args[1]);
-            if(addedmoney > 1){
-                let m = await message.reply("You removed " + addedmoney + " from " + rUser,
-                userData[userId].money = (userData[userId].money - addedmoney))
-                let m1 = await message.channel.send(rUser + ` now has ${userData[userId].money}<:BlockCoins:503678855068778496>`)
-            }else{
-                return message.reply('Please enter a number greater than 1')
-            }
-        }else {return}
-    };
-
-    
-    //8ball
-
-    if (msg === prefix + "8ball") {
-        let m = await message.reply('give me a question >:(')
-    } else if (msg.startsWith(prefix + "8ball")) {
-        var sayings = ["Of course not.",
-                      "I believe it is true.",
-                      "Can you repeat the question? i wasnt listening",
-                      "Dont ask stupid things",
-                      "Out of all the things you could ask.."];
-
-        var results =  Math.floor((Math.random() * sayings.length) + 0)
-        let m = await message.reply(sayings[results]);
-    } else if (msg.startsWith(prefix + "8ball") && msg.includes("event"||"event planning"||"alien"||"ufo")) {
-        if (sender.id !== ["186487324517859328","376950284968001556","353782817777385472"]) {
-          message.send("No leaks for future events? Open your eyes, chinese man. Rinkky Teases thinks all day and night. He cant keep his mounth shut.")
-        }
-      };
     
     
     // MUSIC STUFF
@@ -954,23 +576,6 @@ bot.on('message', async message => {
         .addField("Songs:", serverQueue.songs.map(song => `**-** ${song.title}`))
         return await message.channel.send(queueEmbed)
     }
-
-      //DM forwarding - draft
-      if (message.channel.type == 'dm'){ //checks for DM
-        let dmName = `${nick}DM`
-        staffchat = member.guild.channels.find('name', 'staff');
-
-        message.staffchat.send({embed: { //forwards DM to staff chat
-          color: 0xff0000,
-          title: "DM Forwarded" ,
-         description: dm.content ,
-         timestamp: new Date(),
-          footer: {
-          icon_url: sender.avatarURL,
-          text: `by ${dmName}`
-          }
-        }})
-      };
 
 
     // I no touch dw
