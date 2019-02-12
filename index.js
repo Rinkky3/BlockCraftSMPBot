@@ -23,6 +23,7 @@ const commands = ["pingrole", "leaderboard", "rpingrole", "botinfo", "serverinfo
 
 // json files
 var userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
+console.log(userData)
 
 // Listener Event: Bot Launched
 bot.on('ready', () => {
@@ -76,6 +77,7 @@ bot.on('message', async message => {
     let PlayerRole = message.guild.roles.find('name', "Player")
     let muted = message.guild.roles.find('name', "Muted")
     let pingRole = message.guild.roles.find('name', "Ping")
+    
     
     //json stuff
     if (!userData[sender.id].appsNumber) userData[sender.id].appsNumber = 0;
