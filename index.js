@@ -34,7 +34,7 @@ bot.on('ready', () => {
     //generalchat.send(`Topic of the week: `)
     
     
-    bot.user.setActivity("prefix ` | Blocks Awakens")
+    bot.user.setActivity("https://imgur.com/tnO7nb6")
 
 });
 
@@ -80,7 +80,7 @@ bot.on('message', async message => {
     
     
     //json stuff
-    if(!userData[sender.id]) userData[sender.id] = {}
+    if (!userData[sender.id]) userData[sender.id] = {}
     if (!userData[sender.id].appsNumber) userData[sender.id].appsNumber = 0;
     if (!userData[sender.id].username) userData[sender.id].username = sender.username;
     if (!userData[sender.id].warns) userData[sender.id].warns = 0;
