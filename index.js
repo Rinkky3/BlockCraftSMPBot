@@ -34,7 +34,7 @@ bot.on('ready', () => {
     //generalchat.send(`Topic of the week: `)
     
     
-    bot.user.setActivity("https://imgur.com/tnO7nb6")
+    bot.user.setActivity("Wᒷ ⍑ᔑ⍊ᒷ ╎リℸ ̣ ᒷ∷ᒷᓭℸ ̣  ℸ ̣ 𝙹 t⍑ᒷ eꖎ↸ᒷ∷ oリᒷᓭ")
 
 });
 
