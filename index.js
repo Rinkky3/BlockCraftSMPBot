@@ -34,7 +34,7 @@ bot.on('ready', () => {
     //generalchat.send(`Topic of the week: `)
     
     
-    bot.user.setActivity("Wᒷ ⍑ᔑ⍊ᒷ ╎リℸ ̣ ᒷ∷ᒷᓭℸ ̣  ℸ ̣ 𝙹 t⍑ᒷ eꖎ↸ᒷ∷ oリᒷᓭ") 
+    bot.user.setActivity("Oiling really old redstone")
 
 });
 
@@ -60,7 +60,7 @@ bot.on('guildMemberAdd', member => {
     // Do nothing if the channel wasn't found on this server
     if (!channel) return;
     // Send the message, mentioning the member
-    channel.send(`Welcome ${member}! The applications are closed right now, but feel free to stay! We will be opening applications again the next season!`); //You can apply to get whitelisted, by clicking the link provided here: ${channelinfo}. Your answers must be a paragraph long. Good luck! 
+    channel.send(`Welcome ${member}! You can apply to get whitelisted, by clicking the link provided here: #info. Each answer must be a paragraph long. Good luck!`); //You can apply to get whitelisted, by clicking the link provided here: ${channelinfo}. Your answers must be a paragraph long. Good luck! 
     
   });
 
