@@ -75,7 +75,7 @@ bot.on('guildMemberAdd', member => {
     // Do nothing if the channel wasn't found on this server
     if (!channel) return;
     // Send the message, mentioning the member
-    channel.send(`Welcome ${member}! You can apply to get whitelisted, by clicking the link provided here: #info. Each answer must be a paragraph long. Good luck!`); //You can apply to get whitelisted, by clicking the link provided here: ${channelinfo}. Your answers must be a paragraph long. Good luck! 
+    channel.send(`Welcome ${member}! You can apply to get whitelisted, by clicking the link provided here: ${channelinfo}. Each answer must be a paragraph long. Good luck!`); //You can apply to get whitelisted, by clicking the link provided here: ${channelinfo}. Your answers must be a paragraph long. Good luck! 
     
   });
 
