@@ -1,3 +1,4 @@
+const Discord = require("discord.js")
 module.exports.run = async(bot, message, prefix) =>{
   let rRole = message.mentions.roles.first()
   if(!rRole) return message.reply("Who dat role? I cant find it.")
