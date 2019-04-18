@@ -13,7 +13,7 @@ module.exports.run = async(bot, message, prefix) =>{
 	let args = msg.split(" ").slice(1)
 	const Discord = require("discord.js")
 	if(!args[0]){
-	  const commands = ["pingrole", "leaderboard", "rpingrole", "botinfo", "serverinfo", "roleinfo", "member", "report", "play", "skip", "volume", "np", "queue"]
+	  const commands = ["admin","pingrole", "leaderboard", "rpingrole", "botinfo", "serverinfo", "roleinfo", "member", "report", "play", "skip", "volume", "np", "queue"]
 		let embed = new Discord.RichEmbed()
 		.setDescription("All available commands")
 		.setColor(0x00fff3)

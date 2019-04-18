@@ -20,7 +20,7 @@ var voted = 0;
 var playerVoted = [];
 const profanities = ["test", "test2"];
 
-const commands = ["pingrole", "leaderboard", "rpingrole", "botinfo", "serverinfo", "roleinfo", "member", "report", "coinflip", "diceroll", "work", "8ball", "play", "skip", "volume", "np", "queue"]
+const commands = ["admin","pingrole", "leaderboard", "rpingrole", "botinfo", "serverinfo", "roleinfo", "member", "report", "coinflip", "diceroll", "work", "8ball", "play", "skip", "volume", "np", "queue"]
 
 // json files
 bot.userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
