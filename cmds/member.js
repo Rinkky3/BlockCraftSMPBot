@@ -3,6 +3,7 @@ module.exports.run = async(bot, message, prefix) =>{
   let msg = message.content.toLowerCase()
   let args = msg.split(" ").slice(1)
   let rMember = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
+  if(!rMember) return await message.channel.send("Please provide an id or @mention")
   let micon = rMember.displayAvatarURL
   
   if(!rMember)  return message.reply("Who dat user? I dunno him.")
