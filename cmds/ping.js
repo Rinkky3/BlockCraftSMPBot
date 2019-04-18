@@ -1,7 +1,6 @@
 module.exports.run = async(bot, message, prefix) =>{
   let sender = message.author; // The person who sent the message
   let msg = message.content.toLowerCase();
-  let prefix = '`' // The text before commands
   if (bot.user.id === message.author.id) { return }
   let nick = sender.username
   let Owner = message.guild.roles.find(r => r.name == "Owner")    
