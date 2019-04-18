@@ -133,16 +133,6 @@ bot.on('message', async message => {
     }
 
 
-    // admin help
-    if(msg === prefix + "help admin") {
-      if (message.author.id === "186487324517859328") {
-        let m = await message.channel.send("just do `deny user reason for christ's sake!\n Cant you remember something for once in your miserable life?")
-      } else if (message.member.roles.has(Owner.id)) {
-        let m = await message.channel.send("It is `deny user reason kind sir.")
-      }
-    }
-
-
     //Single Poll
     if (msg.startsWith("poll:")) {
       if(message.author.id === "186487324517859328" || message.member.roles.has(Owner.id)) { 

@@ -79,7 +79,23 @@ module.exports.run = async(bot, message, prefix) =>{
 		.addField("Usage:", "`report @(member) (reason)")
 		.addField("Description:", "Report another user.")
 		return await message.channel.send(embed)
-	}   
+	}
+	if(args[0] === "admin"){
+		if (message.author.id === "186487324517859328") {
+			let embed = new Discord.RichEmbed()
+			.setDescription("You moron")
+			.setColor(0x00fff3)
+			.addField("just do `deny <user> <reason> or `accept <user> for christ's sake!")
+			.addField("Description:", "Cant you remember something for once in your miserable life?")
+			return await message.channel.send(embed)
+		} else if (message.member.roles.has(Owner.id)){
+			let embed = new Discord.RichEmbed()
+			.setDescription("Deny and Accept")
+			.setColor(0x00fff3)
+			.addField("Usage:", "`deny <user> <reason> or `accept <user> kind sir.")
+			.addField("Description:", "dont worry, everyone forgets from time to time.")
+		}
+	}
 	if(args[0] === "play"){
 		let embed = new Discord.RichEmbed()
 		.setDescription("Play a song")
