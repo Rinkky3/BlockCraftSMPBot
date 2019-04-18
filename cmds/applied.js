@@ -9,7 +9,6 @@ module.exports.run = async(bot, message, prefix) =>{
   let PlayerRole = message.guild.roles.find(r => r.name == "Player")
   let muted = message.guild.roles.find(r => r.name == "Muted")
   let pingRole = message.guild.roles.find(r => r.name == "Ping")
-  let pending = message.guild.roles.find(r => r.name == "In-Progress")    
   let args = msg.split(" ").slice(1)
   let appchannel = message.guild.channels.find(c => c.name == "staff")
   let pending = message.guild.roles.find(r => r.name == "In-Progress")    
