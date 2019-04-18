@@ -85,7 +85,7 @@ module.exports.run = async(bot, message, prefix) =>{
 			let embed = new Discord.RichEmbed()
 			.setDescription("You moron")
 			.setColor(0x00fff3)
-			.addField("just do `deny <user> <reason> or `accept <user> for christ's sake!")
+			.addField("just do `deny <user> <reason> or `accept <user>` for christ's sake!")
 			.addField("Description:", "Cant you remember something for once in your miserable life?")
 			return await message.channel.send(embed)
 		} else if (message.member.roles.has(Owner.id)){
