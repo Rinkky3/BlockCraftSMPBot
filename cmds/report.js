@@ -1,5 +1,6 @@
 const Discord = require("discord.js")
 module.exports.run = async(bot, message, prefix) =>{
+  let msg = message.content.toLowerCase()
   let args = msg.split(" ").slice(1)
       let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
       let rreason = args.join(" ").slice(22)
