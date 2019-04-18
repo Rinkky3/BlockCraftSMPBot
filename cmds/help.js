@@ -11,7 +11,6 @@ module.exports.run = async(bot, message, prefix) =>{
 	let pingRole = message.guild.roles.find(r => r.name == "Ping")
 	let pending = message.guild.roles.find(r => r.name == "In-Progress")    
 	let args = msg.split(" ").slice(1)
-	let args = message.content.toLowerCase().split(" ").slice(1);
 	const Discord = require("discord.js")
 	if(!args[0]){
 	  const commands = ["pingrole", "leaderboard", "rpingrole", "botinfo", "serverinfo", "roleinfo", "member", "report", "play", "skip", "volume", "np", "queue"]
