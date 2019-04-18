@@ -1,3 +1,4 @@
+const Discord = require("discord.js")
 module.exports.run = async(bot, message, prefix) =>{
   let appchannel = message.guild.channels.find(c => c.name == "staff")
   let Staff = message.guild.roles.find(r => r.name == "Staff")
