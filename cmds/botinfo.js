@@ -1,3 +1,4 @@
+const Discord = require("discord.js")
 module.exports.run = async(bot, message, prefix) =>{
   let bicon = bot.user.displayAvatarURL
   let botembed = new Discord.RichEmbed()
