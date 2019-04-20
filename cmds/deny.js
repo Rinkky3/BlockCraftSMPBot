@@ -8,7 +8,7 @@ module.exports.run = async(bot, message, prefix) =>{
   let pingRole = message.guild.roles.find(r => r.name == "Ping")
   let args = msg.split(" ").slice(1)
   let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
-  let rreason = args.join(" ").slice(22)
+  let rreason = args.slice(1).join(" ")
   message.delete()
   if (!message.member.roles.has(Owner.id) && !message.member.roles.has(Staff.id)) return message.channel.send("You do not have access to this command")
   if (!rUser) return message.channel.send('This user doesn\'t exist')
