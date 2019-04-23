@@ -6,7 +6,7 @@ module.exports.run = async(bot, message, prefix) =>{
     var evaled;
     if(args[0] != "-ml"){
       var code = args.join(" ");
-      evaled = eval(code);
+      evaled = await eval(code);
     }else{
       args.shift()
       var code = args.join(" ");
