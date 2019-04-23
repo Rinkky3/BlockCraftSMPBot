@@ -141,6 +141,17 @@ bot.on('message', async message => {
             let m3 = await message.react("🤷")
         } else {return};
       };
+
+
+      if(msg === prefix + "randomdeny") {
+        let denyEmbed = new Discord.RichEmbed()
+        .setDescription("User Denied")
+        .setColor(0xFF0000)
+        .addField('Name of user denied:', '<@498532281657458710>' )
+        .addField('Reason', "the reason you want to join blockcraft is a little bit underwelming")
+        .addField('Retry', "Dont worry, you can just apply again!")
+        message.guild.channels.find(c => c.name == "pending").send(denyEmbed)
+      }
       
     //timed message
     //const generalchat = bot.channels.get("469490700845580298")
