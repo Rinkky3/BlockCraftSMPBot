@@ -18,5 +18,5 @@ module.exports.run = async(bot, message, prefix) =>{
   .addField('Name of user denied:', rUser)
   .addField('Reason', rreason)
   .addField('Retry', "Dont worry, you can just apply again!")
-  message.guild.channels.find(c => c.name == "pending").send(denyEmbed)  
+  message.guild.channels.find(c => c.name == "newcomers-and-applications").send(denyEmbed)  
 }
