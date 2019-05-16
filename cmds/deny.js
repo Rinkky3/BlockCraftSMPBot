@@ -6,7 +6,7 @@ module.exports.run = async(bot, message, prefix) =>{
   let PlayerRole = message.guild.roles.find(r => r.name == "Player")
   let muted = message.guild.roles.find(r => r.name == "Muted")
   let pingRole = message.guild.roles.find(r => r.name == "Ping")
-  let args = msg.split(" ").slice(1)
+  let args = message.content.split(" ").slice(1)
   let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
   let rreason = args.slice(1).join(" ")
   message.delete()
