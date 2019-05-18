@@ -7,7 +7,7 @@ module.exports.run = async(bot, message, prefix) =>{
   let AcceptedRole = await message.guild.roles.find(r => r.name == "Accepted")
   let pending = await message.guild.roles.get("469489009106616331")    
   const channelinfo = message.guild.channels.find(c => c.name == "info");
-  const channelannounce = message.guild.channels.find(c => c.name == "accouncements");
+  const channelannounce = message.guild.channels.find(c => c.name == "announcements");
   const channelfaq = message.guild.channels.find(c => c.name == "faq");
   const channelideas = message.guild.channels.find(c => c.name == "ideas");
   let args = msg.split(" ").slice(1)
