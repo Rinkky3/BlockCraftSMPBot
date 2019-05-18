@@ -2,10 +2,10 @@ const Discord = require("discord.js")
 module.exports.run = async(bot, message, prefix) =>{
   let msg = message.content.toLowerCase();
   if (bot.user.id === message.author.id) { return }
-  let Owner = message.guild.roles.find(r => r.name == "Owner")    
-  let Staff = message.guild.roles.find(r => r.name == "Staff")
-  let AcceptedRole = message.guild.roles.find(r => r.name == "Accepted")
-  let pending = message.guild.roles.get("578721415931363328")    
+  let Owner = await message.guild.roles.find(r => r.name == "Owner")    
+  let Staff = await message.guild.roles.find(r => r.name == "Staff")
+  let AcceptedRole = await message.guild.roles.find(r => r.name == "Accepted")
+  let pending = await message.guild.roles.get("469489009106616331")    
   const channelinfo = message.guild.channels.find(c => c.name == "info");
   const channelannounce = message.guild.channels.find(c => c.name == "accouncements");
   const channelfaq = message.guild.channels.find(c => c.name == "faq");
