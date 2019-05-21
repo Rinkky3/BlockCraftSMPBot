@@ -2,14 +2,14 @@ const Discord = require("discord.js")
 module.exports.run = async(bot, message, prefix) =>{
   let msg = message.content.toLowerCase();
   if (bot.user.id === message.author.id) { return }
-  let Owner = message.guild.roles.find(r => r.name == "Owner")    
-  let Staff = message.guild.roles.find(r => r.name == "Staff")
-  let AcceptedRole = message.guild.roles.find(r => r.name == "Accepted")
-  let pending = message.guild.roles.find(r => r.name == "In-Progress")    
-  const channelinfo = member.guild.channels.find(c => c.name == "info");
-  const channelannounce = member.guild.channels.find(c => c.name == "accouncements");
-  const channelfaq = member.guild.channels.find(c => c.name == "faq");
-  const channelideas = member.guild.channels.find(c => c.name == "ideas");
+  let Owner = await message.guild.roles.find(r => r.name == "Owner")    
+  let Staff = await message.guild.roles.find(r => r.name == "Staff")
+  let AcceptedRole = await message.guild.roles.find(r => r.name == "Accepted")
+  let pending = await message.guild.roles.get("469489009106616331")    
+  const channelinfo = message.guild.channels.find(c => c.name == "info");
+  const channelannounce = message.guild.channels.find(c => c.name == "announcements");
+  const channelfaq = message.guild.channels.find(c => c.name == "faq");
+  const channelideas = message.guild.channels.find(c => c.name == "ideas");
   let args = msg.split(" ").slice(1)
   let rUser = message.guild.member(message.mentions.users.first() || message.guild.members.get(args[0]))
   message.delete(1000)
