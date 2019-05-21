@@ -35,7 +35,7 @@ bot.on('ready', () => {
     //generalchat.send(`Topic of the week: `)
     
     
-    bot.user.setActivity("Oiling really old redstone")
+    bot.user.setActivity("Prepairing 1.14.1 Chunks")
     fs.readdir("./cmds/", (err, files) => {
     	if(err) console.error(err)
     	
