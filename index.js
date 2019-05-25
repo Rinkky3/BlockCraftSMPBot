@@ -20,6 +20,13 @@ var voted = 0;
 var playerVoted = [];
 const profanities = ["test", "test2"];
 
+const requestOpts = {
+	hostname: "mcapi.us",
+	path: "/server/status?ip=54.39.87.40&port=25578",
+	method: 'GET'
+} 
+const http = require('http')
+
 const commands = ["admin","pingrole", "leaderboard", "rpingrole", "botinfo", "serverinfo", "roleinfo", "member", "report", "coinflip", "diceroll", "work", "8ball", "play", "skip", "volume", "np", "queue"]
 
 // json files
@@ -34,8 +41,9 @@ bot.on('ready', () => {
     //const generalchat = bot.channels.get("469490700845580298")
     //generalchat.send(`Topic of the week: `)
     
+		let status = await getUserCount()
     
-    bot.user.setActivity("Prepairing 1.14.1 Chunks")
+    bot.user.setActivity(`Current online members: ${status.players.now}`)
     fs.readdir("./cmds/", (err, files) => {
     	if(err) console.error(err)
     	
@@ -50,7 +58,10 @@ bot.on('ready', () => {
     		bot.commands.set(f, props)
     	});
     });
-
+		setInterval(() => {
+			let stats = await getUserCount()
+			bot.user.setActivity(`Current online members: ${status.players.now}`)
+		}, 300000)
 });
 
 //event listener: join/leave a voice channel
@@ -372,6 +383,27 @@ function sortObject() {
 	}
 	arr.sort(function(a, b) { return b.value - a.value; });
 	return arr;
+}
+
+async function getUserCount(){
+	return new Promise(async (resolve, reject) => {
+		let body
+		const req = http.request(requestOpts, async (res) => {
+			res.setEncoding('utf8')
+			res.on('data', (chunk) => {
+				body += chunk
+			})
+			res.on('end', () => {
+				resolve(JSON.parse(body))
+			})
+		})
+
+		req.on('error', (e) => {
+			reject(`Error... ${e.message}`)
+		})
+
+		req.end()
+	})
 }
 //  Login
 
