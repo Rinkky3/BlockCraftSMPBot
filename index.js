@@ -389,7 +389,7 @@ function sortObject() {
 async function getUserCount(){
 	console.log("Get user count")
 	return new Promise(async (resolve, reject) => {
-		let body
+		let body = ""
 		const req = http.request(requestOpts, async (res) => {
 			res.setEncoding('utf8')
 			res.on('data', (chunk) => {
