@@ -59,7 +59,7 @@ bot.on('ready', async () => {
     		bot.commands.set(f, props)
     	});
     });
-		setInterval(() => {
+		setInterval(async () => {
 			let stats = await getUserCount()
 			bot.user.setActivity(`Current online members: ${status.players.now}`)
 		}, 300000)
