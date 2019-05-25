@@ -34,7 +34,7 @@ bot.userData = JSON.parse(fs.readFileSync("./storage/userData.json", "utf8"))
 console.log(bot.userData)
 
 // Listener Event: Bot Launched
-bot.on('ready', () => {
+bot.on('ready', async () => {
     console.log('Power Level Stabilised') // Runs when the bot is launched
 
     //const botchat = bot.channels.get("469992574791319552")
@@ -42,6 +42,7 @@ bot.on('ready', () => {
     //generalchat.send(`Topic of the week: `)
     
 		let status = await getUserCount()
+		console.log(await status)
     
     bot.user.setActivity(`Current online members: ${status.players.now}`)
     fs.readdir("./cmds/", (err, files) => {
@@ -386,6 +387,7 @@ function sortObject() {
 }
 
 async function getUserCount(){
+	console.log("Get user count")
 	return new Promise(async (resolve, reject) => {
 		let body
 		const req = http.request(requestOpts, async (res) => {
