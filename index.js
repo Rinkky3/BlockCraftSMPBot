@@ -61,7 +61,7 @@ bot.on('ready', async () => {
     });
 		setInterval(async () => {
 			let stats = await getUserCount().catch((e) => console.error(e))
-			bot.user.setActivity(`Current online members: ${await status.players.now}`)
+			bot.user.setActivity(`Current online members: ${await stats.players.now}`)
 		}, 300000)
 });
 
