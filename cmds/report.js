@@ -11,7 +11,7 @@ module.exports.run = async(bot, message, prefix) =>{
         if(!rUser) return message.reply("Da user you searchin, is unavailable, please report later.")
         if(!rreason) return message.reply("Where da reason? i dont see any.")
 
-        let reportEmbed = new Discord.RichEmbed()
+        let reportEmbed = new Discord.MessageEmbed()
         .setDescription("Report-ing for duty!")
         .setColor(0xe0782b)
         .addField("Reported User", `${rUser} with ID: ${rUser.id}`)

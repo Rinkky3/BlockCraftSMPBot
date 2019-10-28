@@ -5,7 +5,7 @@ module.exports.run = async(bot, message, prefix) =>{
   var rmembers = message.guild.roles.get(rRole.id).members.map(m=>m.user.tag)
   var numMembers = rmembers.length
   if(numMembers == 0) {
-     let roleembed = new Discord.RichEmbed()
+     let roleembed = new Discord.MessageEmbed()
     .setDescription("__**Role Information**__")
     .setColor(0x15f153)
     .addField("Name", rRole)
@@ -13,7 +13,7 @@ module.exports.run = async(bot, message, prefix) =>{
     .addField(`Members with this role (${numMembers}):`, "None");
     return await message.channel.send(roleembed) 
   }
-  let roleembed = new Discord.RichEmbed()
+  let roleembed = new Discord.MessageEmbed()
   .setDescription("__**Role Information**__")
   .setColor(0x15f153)
   .addField("Name", rRole)

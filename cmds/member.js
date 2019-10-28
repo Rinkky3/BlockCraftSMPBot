@@ -8,7 +8,7 @@ module.exports.run = async(bot, message, prefix) =>{
   
   if(!rMember)  return message.reply("Who dat user? I dunno him.")
   
-  let memberembed = new Discord.RichEmbed()
+  let memberembed = new Discord.MessageEmbed()
   .setDescription("__**Member Information**__")
   .setColor(0x15f153)
   .setThumbnail(micon)

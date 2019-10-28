@@ -12,7 +12,7 @@ module.exports.run = async(bot, message, prefix) =>{
   message.delete()
   if (!message.member.roles.has(Owner.id) && !message.member.roles.has(Staff.id)) return message.channel.send("You do not have access to this command")
   if (!rUser) return message.channel.send('This user doesn\'t exist')
-  let denyEmbed = new Discord.RichEmbed()
+  let denyEmbed = new Discord.MessageEmbed()
   .setDescription("**___User Denied___**")
   .setColor(0xFF0000)
   .addField('Name of user denied:', rUser)
